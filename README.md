@@ -1,8 +1,19 @@
-# React + Vite
+# אפליקציית **ברוב עם**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<div style="text-align: center;">
+  <img src="public/berov_am_logo.svg" width=20% alt="Your Image Description">
+</div><br>
 
-Currently, two official plugins are available:
+>תכנון אפליקצייה [← figma](https://www.figma.com/file/ZVR8LMlZ359l9Lg1MpouCu/planing?type=whiteboard&t=v2nRiir6UPkVz0Uy-1)  
+>תכנון מסכים [← figma](https://www.figma.com/file/tSH3mW9se9HT9Zz0nJ4oJs/App-Screens?type=design&mode=design&t=1kAnJtjFotGIWbCe-1)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+אפליקציית מציאת מניין המבוססת על חכמת ההמונים- כוח הרבים, ברוב עם!  
+משתמש מציין מיקום- ובהתאסף מניין באזור נשלחת הודעה ונוצר מניין.  
+האפליקציה מתאימה לשימוש במקומות יישוב, בהם יש בתי כנסיות ולשימוש בשטחים פתוחים, טיולים וכד’ בהם ניתן ליצור מניין באופן עצמאי.  
+האפליקציה מתאימה ליצירת מניינים קבועים וחד פעמיים, בהתאם לצורך.
+
+>למען הסדר הטוב במקומות בהם באו לידי ביטוי דרישות הפרויקט, הושם תו ♥  
+חיפוש כללי אחריו ימקד את הבדיקה :)  
+בהצלחה, ותודה על הכל!
+
+כמובן, האפליקצייה רחוקה מלהיות מושלמת.  מקווה יום אחד לשדרג אותה....

@@ -1,56 +1,33 @@
-import { useState } from 'react'
+import { RouterProvider } from 'react-router-dom'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { ThemeProvider } from '@emotion/react'
+import { CssBaseline } from '@mui/material'
+import appTheme from './components/appComponent/appTheme'
+import MinyanBar from './components/appComponent/MinyanBar'
+import Router from './components/appComponent/Router'
 import './App.css'
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { CssBaseline, Switch } from '@mui/material';
-import FormDate from './components/FormDate';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import FindForm from './components/FindForm';
+import { observer } from 'mobx-react'
 
 
-
-function App() {
-
-  // state to manage the dark mode
-  const [toggleDarkMode, setToggleDarkMode] = useState(true);
-
-  // function to toggle the dark mode as true or false
-  const toggleDarkTheme = () => {
-    setToggleDarkMode(!toggleDarkMode);
-  };
-
-  // applying the primary and secondary theme colors
-  const darkTheme = createTheme({
-    direction: 'rtl',
-    palette: {
-      mode: toggleDarkMode ? 'dark' : 'light', // handle the dark mode state on toggle
-      primary: {
-        main: '#5302FF',
-      },
-      secondary: {
-        main: '#DCFF02',
-
-      },
-    },
-  });
-
+const App = (observer(() => {
 
   return (
 
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={appTheme}>
           <CssBaseline />
-          {/* <MinyanAppBar/> */}
-          <div className="hello"> hello App</div>
-          <Switch checked={toggleDarkMode} onChange={toggleDarkTheme} />
-          <FindForm/>
+          <MinyanBar />
+
+          <div id="mainDiv">
+            <RouterProvider router={Router} />
+          </div>
+
         </ThemeProvider>
       </LocalizationProvider>
-
-
     </>
   )
-}
+}))
 
 export default App

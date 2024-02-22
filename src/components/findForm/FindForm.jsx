@@ -1,139 +1,138 @@
 import { useState } from "react";
-import { ToggleButton, Checkbox, FormControlLabel, FormGroup, ToggleButtonGroup, InputAdornment, TextField, Paper } from "@mui/material";
-import CheckList from "./CheckList";
+import { useNavigate } from "react-router-dom";
+import { observer } from "mobx-react";
+import { ToggleButton, ToggleButtonGroup, InputAdornment, TextField, Button } from "@mui/material";
+import FindRadius from "./FindRadius";
 import Location from "./Location";
-import FormDate from "./FormDate";
-import FormTime from "./FormTme";
+import FindDate from "./FindDate";
+import FindTime from "./FindTme";
+import synagogueStore from "../../data/stores/synagogueStore"
+import SynagogueListView from "./SynagogueListView";
+import dataStore from "../../data/stores/dataStore"
 
 
 
-const FindForm = () => {
+const FindForm = (observer(() => {
 
-    const [repeat, setRepeat] = useState("");
-    const [data, setData] = useState(null);
+    const [findForm, setFindForm] = useState(
+        {
+            prayer: "",
+            location: {
+                lat: "",
+                lng: "",
+                city: "",
+                street: "",
+                number: "",
+            },
+            radius: "",
+            place: "",
+            isFixed: "",
+            date: {
+                dd: "",
+                mm: "",
+                yyyy: "",
+            },
+            time: {
+                hh: "",
+                mm: "",
+            },
+            timeRange: "",
+            synagogues: [],
+        });
 
-    const [place, setPlace] = useState("");
-    const [type, setType] = useState("");
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFindForm({ ...findForm, [name]: value });
+    }
 
-    const [range, setRange] = useState("");
+    const handleFromChild = (key, value) => {
+        setFindForm({ ...findForm, [key]: value });
+    }
 
+    const navigate = useNavigate()
 
-
-    const [location, setLocatione] = useState("");
-    const [distance, setDistance] = useState("");
-
-
-    const handleChangeRepeat = (event, newValue) => {
-        if (newValue !== null) {
-            setRepeat(newValue);
-        }
-    };
-    const handleChangePlace = (event, newValue) => {
-        if (newValue !== null) {
-            setPlace(newValue);
-        }
-    };
-    const handleChangeType = (event, newValue) => {
-        if (newValue !== null) {
-            setType(newValue);
-        }
-    };
-
-    const handleChangeRange = (event, newValue) => {
-        if (newValue !== null) {
-            setRange(newValue);
-        }
-    };
-
-    const handleChangeLocation = (event, newValue) => {
-        if (newValue !== null) {
-            setLocation(newValue);
-        }
-    };
-
-
-
-
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        dataStore.SetFindMinyan(findForm);
+        // console.log("handleSubmit - findForm:", dataStore.findForm);
+        navigate("/findResult/options");
+    }
 
     return (
         <>
-            <form>
+            <form >
 
+                {/* prayer type */}
                 <ToggleButtonGroup
-                    value={repeat}
-                    exclusive
-                    onChange={handleChangeRepeat}
-                    aria-label="repeat"
-                    color="primary"
-                    fullWidth
-
+                    aria-label="prayer"
+                    value={findForm.prayer}
+                    onChange={handleChange}
                 >
-                    <ToggleButton value="fixed">קבוע</ToggleButton>
-                    <ToggleButton value="once">חד פעמי</ToggleButton>
+                    <ToggleButton name="prayer" value="1">שחרית</ToggleButton>
+                    <ToggleButton name="prayer" value="2">מנחה</ToggleButton>
+                    <ToggleButton name="prayer" value="3">ערבית</ToggleButton>
                 </ToggleButtonGroup>
-                <br />
-                {repeat == "once" ? <FormDate /> : null}
 
 
-                <FormTime />
+                {/* location */}
+                <Location handleLocation={handleFromChild} />
 
+                {/* radius */}
+                <FindRadius handleRadius={handleFromChild} />
+
+
+                {/* place */}
                 <ToggleButtonGroup
-                    value={place}
-                    exclusive
-                    onChange={handleChangePlace}
                     aria-label="place"
-                    color="primary"
-                    fullWidth
+                    value={findForm.place}
+                    onChange={handleChange}
                 >
-                    <ToggleButton value="city">יישוב</ToggleButton>
-                    <ToggleButton value="open">שטח פתוח</ToggleButton>
+                    <ToggleButton name="place" value="city">יישוב</ToggleButton>
+                    <ToggleButton name="place" value="open">שטח פתוח</ToggleButton>
                 </ToggleButtonGroup>
                 <br />
 
+
+                {/* repeat */}
                 <ToggleButtonGroup
-                    value={type}
-                    exclusive
-                    onChange={handleChangeType}
-                    aria-label="type"
-                    color="primary"
-                    fullWidth
+                    aria-label="isFixed"
+                    value={findForm.isFixed}
+                    onChange={handleChange}
                 >
-                    <ToggleButton value="1">שחרית</ToggleButton>
-                    <ToggleButton value="2">מנחה</ToggleButton>
-                    <ToggleButton value="3">ערבית</ToggleButton>
+                    <ToggleButton name="isFixed" value="1">קבוע</ToggleButton>
+                    <ToggleButton name="isFixed" value="0">חד פעמי</ToggleButton>
                 </ToggleButtonGroup>
+                <br />
 
-                <Location  />
 
-                <Paper variant="outlined">
-                    <TextField
-                        label="טווח"
-                        id="filled-start-adornment"
-                        sx={{ m: 1, width: '25ch' }}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">טווח מרחק אפשרי</InputAdornment>,
-                        }}
-                        variant="filled"
-                    />
+                {/* date */}
+                {findForm.isFixed === "0" ? <FindDate handleDate={handleFromChild} /> : null}
 
-                    <ToggleButtonGroup
-                        value={range}
-                        exclusive
-                        onChange={handleChangeRange}
-                        aria-label="range"
-                        color="primary"
 
-                    >
-                        <ToggleButton value="minutes">דק' הליכה</ToggleButton>
-                        <ToggleButton value="km">קילומטר</ToggleButton>
-                    </ToggleButtonGroup>
-                </Paper>
+                {/* time */}
+                <FindTime handleTime={handleFromChild} />
 
-                {place == "city" && location ? <CheckList /> : null}
+                {/* timeRange */}
+                <TextField
+                    label="טווח"
+                    name="timeRange"
+                    value={findForm.timeRange}
+                    onChange={handleChange}
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">טווח זמן אפשרי</InputAdornment>,
+                        endAdornment: <InputAdornment position="end">דקות</InputAdornment>,
+                    }}
+                />
+                <br />
+
+                {/*  ♥ synagogues list - order by distanse */}
+                {findForm.place === "city" && location && synagogueStore.synagogueList.length > 0 ? <SynagogueListView /> : null}
+
+                <Button onClick={handleSubmit}>שמור</Button>
 
             </form>
         </>
     );
-}
+}))
 
 export default FindForm;

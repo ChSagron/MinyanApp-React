@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { observer } from 'mobx-react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,19 +12,26 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import { useState } from 'react';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import dataStore from '../../data/stores/dataStore.js';
 
-const pages = ['Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const MinyanAppBar = () => {
+
+const pages = ['מציאת מניין'];
+const settings = ['פרופיל', 'יציאה'];
+
+
+
+const MinyanBar = (observer(() => {
+
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -35,31 +44,20 @@ const MinyanAppBar = () => {
     setAnchorElUser(null);
   };
 
+
+
   return (
-    <>
-    <div>app bar</div>
-    {/* <AppBar position="static">
+
+    <AppBar position="static"  >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
 
+          {/* dark mode select */}
+          <IconButton sx={{ ml: 1 }} onClick={() => dataStore.setDarkMode()} color='inherit'>
+            {dataStore.darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+
+          {/* menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -71,6 +69,7 @@ const MinyanAppBar = () => {
             >
               <MenuIcon />
             </IconButton>
+
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -96,25 +95,14 @@ const MinyanAppBar = () => {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
+
+          {/* logo img */}
+          <div>
+
+            <img src="/berov_am_logo.svg" alt="Berov AM Logo" className='barLogo' />
+          </div>
+
+          {/* pages list desktop */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -127,12 +115,15 @@ const MinyanAppBar = () => {
             ))}
           </Box>
 
+          {dataStore.user.nickname != null ? <div className='nickname'>שלום {dataStore.user.nickname}</div> : null}
+          {/* prfile settings */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -158,9 +149,7 @@ const MinyanAppBar = () => {
           </Box>
         </Toolbar>
       </Container>
-    </AppBar> */}
-  </>
+    </AppBar>
   );
-}
-
-export default MinyanAppBar;
+}))
+export default MinyanBar;

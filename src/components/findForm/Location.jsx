@@ -1,75 +1,87 @@
-import { useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Button, Card, TextField } from "@mui/material";
+import { GetTop10 } from "../../data/servers/synagoguesServer";
 
-const Location = (handleSave) => {
+const Location = ({ handleLocation, color, locationExists }) => {
 
-  const [locationData, setLocationData] = useState(
+  const [locationDetails, setLocationDetails] = useState(
     {
-      street: "",
-      num: "",
       city: "",
+      street: "",
+      number: "",
     }
   );
 
-  const [ location , setLocation ] = useState(
-    {
-      
+  useEffect(() => {
+    if (locationExists != null) {
+      setLocationDetails(locationExists);
     }
-  );
+  }, [locationExists])
+
+  const example1 = { lat: 21, lng: 31 };
+  const example2 = { lat: 22, lng: 32 };
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setLocationData({ ...locationData, [name]: value });
-  }
+    setLocationDetails({ ...locationDetails, [name]: value });
+  };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(locationData);
-    findLocation();
-  }
+  const findLocation = async () => {
+    // console.log("find Location");
+    handleLocation("location", example1);
+    await GetTop10(example1);
+  };
 
-  const handleLocation = () => {
-    console.log("handleLocation");
-
-  }
-
-  const findLocation = () => {
-    console.log("findLocation");
-
-  }
+  const convertLocation = async () => {
+    // console.log("convert Location");
+    if (locationDetails.street != "" && locationDetails.city != "" && locationDetails.number != "") {
+      handleLocation("location", example2);
+      await GetTop10(example2);
+    }
+  };
 
   return (
     <>
-      <Box variant="outlined"
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 1, width: '25ch' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField id="filled-basic" label="רחוב" variant="filled"
-            name="street"
-            value={locationData.street}
-            onChange={handleChange}
-          />
+      <Card
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+          m: "2% 0",
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          color={color}
+          size="small"
+          label="רחוב"
+          name="street"
+          value={locationDetails.street}
+          onChange={handleChange}
+        />
 
-          <TextField id="filled-basic" label="עיר" variant="filled"
-            name="city"
-            value={locationData.city}
-            onChange={handleChange}
-          />
+        <TextField
+          color={color}
+          size="small"
+          label="עיר"
+          name="city"
+          value={locationDetails.city}
+          onChange={handleChange}
+        />
 
-          <TextField id="filled-basic" label="מספר" variant="filled"
-            name="num"
-            value={locationData.num}
-            onChange={handleChange}
-          />
-          
-          <Button variant="outlined" onClick={handleLocation} >אתר מיקום</Button>
-          <Button variant="outlined" onClick = {handleSubmit}>שמור</Button>
+        <TextField
+          color={color}
+          size="small"
+          label="מספר"
+          name="number"
+          value={locationDetails.number}
+          onChange={handleChange}
+        />
 
-        </Box>
+        <Button color={color} onClick={findLocation} >אתר מיקום</Button>
+        <Button color={color} onClick={convertLocation}>שמור</Button>
+
+      </Card >
 
 
     </>
